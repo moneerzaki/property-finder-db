@@ -30,3 +30,11 @@ To start the flask app, navigate to the main directory and run
 ```sh
 python3 app.py
 ```
+
+## Database
+
+The 
+
+Dump files are provided: 
+#### `create_database.sql`
+#### `propertyfinder55_dump_final`
