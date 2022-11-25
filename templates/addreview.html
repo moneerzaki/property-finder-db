@@ -24,10 +24,10 @@
 <form method="POST" action="/addreview">
 
 
-Review Text <input type="text" name ="reviewtext" value = "Lorem ipsum" required/>
+Review Text <input type="text" name ="reviewtext" required/>
 <br>
 
-Username <input type="text" name ="username" value="johndoe01" required/>
+Username <input type="text" name ="username"  required/>
 <br>
 
 Date <input type="date" name ="date" required/>
@@ -47,16 +47,16 @@ Rating (1-10) <input type="number" name="rating" max =10 min=1 required/>
 <table border = 1 class = "table table-hover p-3">
 <tr>
     <td>Review ID</td>
-    <td>User</td>
+    <td>Review Text</td>
     <td>Agent</td>
     <td>Review Date</td>
-    <td>Review Text</td>
+    <td>User</td>
+    
+    
 </tr>
     <tr>
     {% for i in addedreview%}
-    
         <td>{{i}}</td>
-    
     {% endfor %}
     </tr>
 </table>
@@ -64,15 +64,26 @@ Rating (1-10) <input type="number" name="rating" max =10 min=1 required/>
 
 <table border = 1 class = "table table-hover">
     
-    
+    <tr>
+        <td>Review ID</td>
+        <td>User</td>
+        <td>Agent</td>
+        <td>Review Date</td>
+        <td>Review Text</td>
+        
+    </tr>
     {% for i in alladdedreviews%}
     <tr>
         
         <td>{{i[0]}}</td>
-        <td>{{i[1]}}</td>
-        <td>{{i[2]}}</td>
-        <td>{{i[3]}}</td>
         <td>{{i[4]}}</td>
+        
+        <td>{{i[2]}}</td>
+        
+        <td>{{i[3]}}</td>
+        <td>{{i[1]}}</td>
+        
+        
     
     {% endfor %}
     </tr>

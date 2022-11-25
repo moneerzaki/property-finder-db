@@ -25,14 +25,13 @@ print("Connected successfully\n")
 
 cursor = connection.cursor()
 
-cursor.execute("use propertyfinder55")
-
 # ************ ************ ************
 # Main Page
 # ************ ************ ************
 @app.route('/', methods=['GET','POST'])
 def index(): 
     return render_template('index.html')
+
 
 # ************ ************ ************
 # Page to create new user - /createuser
@@ -52,21 +51,15 @@ def createuser():
         userid = faker.ean()
         register_user_cmd = "INSERT INTO user VALUES ('"+name+"','"+email+"','"+gender+"',"+str(age)+",'"+dob+"','"+focus+"')"
         print(register_user_cmd)
+        # Ping database
+        connection.ping()
+        
         cursor.execute(register_user_cmd)
+        
+        # COMMIT TO THE DATABASE
+        cursor.commit()
         newusers.append([name, email, gender, age, dob, focus, userid])
-        try:
-            cursor.execute(register_user_cmd)
-            # connection.commit()
-            print("success")
-        except Exception as e:
-            print(e)
-            print("Could not add user. Please try again later.")
 
-        try:
-            cursor.execute("select * from user where username = '"+name+"';")
-            print(cursor.fetchall())
-        except Exception as e:
-            print(e)
         return render_template('createuser.html',newusers=newusers)
 
     if request.method == 'GET':
@@ -78,6 +71,11 @@ def createuser():
 alladdedreviews = []
 @app.route('/addreview', methods =['GET','POST'])
 def addreview():
+
+    # Ping database ########
+    connection.ping()
+
+        
     cursor.execute("select id from agent limit 20;")
     listofagents = cursor.fetchall()
     
@@ -96,6 +94,9 @@ def addreview():
         
         cursor.execute("insert into review values('"+reviewid+"','"+username+"','"+agentid+"','"+date+"','"+reviewtext+"',"+rating+");") 
 
+        # COMMIT TO THE DATABASE
+        cursor.commit()
+
         print("query successfully executed")
         
         addedreview = [reviewid,reviewtext,agentid,date,username]
@@ -113,16 +114,25 @@ def addreview():
 
 @app.route('/viewreviewsbyagent',methods=['GET','POST'])
 def viewreviewsbyagent():
+    # Ping database
+    connection.ping()
+    cursor.execute("select id, name from agent")
+        
+    listofagents = cursor.fetchall()
+
     if request.method == 'POST':
         selectedagent =  request.form.get("selectedagent")
+        connection.ping()
         cursor.execute("select * from review where agent_id ='"+selectedagent+"';")
-        # CHANGE THIS
-        # cursor.commit()
+        
+    
+        # COMMIT TO THE DATABASE
+        cursor.commit()
+
         listofreviews = cursor.fetchall()
-        return render_template('viewreviewsbyagent.html', listofreviews = listofreviews,selectedagent=selectedagent)
+        return render_template('viewreviewsbyagent.html', listofagents=listofagents,listofreviews = listofreviews,selectedagent=selectedagent)
     if request.method =='GET':
-        cursor.execute("select id from agent limit 20")
-        listofagents = cursor.fetchall()
+
         return render_template('viewreviewsbyagent.html',listofagents=listofagents)
 
 
@@ -133,11 +143,14 @@ def viewreviewsbyagent():
 
 @app.route('/viewbrokerrating', methods=['GET', 'POST'])
 def viewbrokerrating():
-    cursor.execute("select b.name, b.id, count(a.id) from agent a inner join broker b on a.broker_id = b.id inner join review r on r.agent_id = a.id where b.name !='N/A' group by b.id order by count(a.id) desc;")
+    # Ping database ########
+    connection.ping()
+    
+    cursor.execute("select b.name, b.id, count(distinct a.id) from agent a inner join broker b on a.broker_id = b.id inner join review r on r.agent_id = a.id where b.name !='N/A' group by b.id order by count(distinct a.id) desc;")
 
     allbrokers = cursor.fetchall()
     
-    cursor.execute("select avg(r.rating), b.name, b.id, count(a.id), round(avg(p.price/p.area_sqm)) from agent a inner join broker b on a.broker_id = b.id inner join review r on r.agent_id = a.id inner join property p on p.agent_id = a.id where b.name !='N/A' group by b.id order by count(a.id) desc limit 5;")
+    cursor.execute("select avg(r.rating), b.name, count(distinct a.id), count(distinct p.id), round(avg(p.price/p.area_sqm)), round(count(distinct p.id) / count(distinct a.id)) from agent a inner join broker b on a.broker_id = b.id inner join review r on r.agent_id = a.id inner join property p on p.agent_id = a.id where b.name !='N/A' group by b.id order by count(distinct p.id) desc limit 5;")
     
     top5brokers=cursor.fetchall()
     
@@ -147,6 +160,9 @@ def viewbrokerrating():
 
     if request.method == 'POST':
         selectedbroker =  request.form.get("selectedbroker")
+        # Ping database ########
+        connection.ping()
+    
         cursor.execute("select avg(r.rating), b.name,count(a.id) from agent a inner join broker b on a.broker_id = b.id inner join review r on r.agent_id = a.id where b.id = '"+selectedbroker+"' group by b.name;")
         
         brokerdetails = cursor.fetchall()
@@ -159,6 +175,9 @@ def viewbrokerrating():
 
 @app.route('/viewproject', methods=['GET','POST'])
 def viewproject():
+    # Ping database ########
+    connection.ping()
+
     cursor.execute("select name,id from project limit 20;")
     allprojects = cursor.fetchall()
     if request.method == 'GET':
@@ -167,8 +186,14 @@ def viewproject():
 
     if request.method == 'POST':
         selectedproject =  request.form.get("selectedproject")
+        # Ping database ########
+        connection.ping()
+        
         cursor.execute("select * from project where id ='"+selectedproject+"';")
+        
         projectdetails = cursor.fetchall()
+        
+        connection.ping()
 
         cursor.execute("select count(*),p.type, round(avg(p.price/p.area_sqm)) from project pr inner join property p on p.project_id= pr.id where pr.id = '"+projectdetails[0][0]+"'group by p.type;")
 
@@ -184,6 +209,9 @@ def viewproject():
 
 @app.route('/viewlocation',methods=['GET','POST'])
 def viewlocation():
+    # Ping database ########
+    connection.ping()
+    
     cursor.execute("select distinct  location, count(id) from property where location != 'N/A' group by location order by count(id) desc;")
     alllocations = cursor.fetchall()
 
@@ -224,6 +252,9 @@ def viewlocation():
 
     if request.method == 'POST':
         selectedlocation =  request.form.get("selectedlocation")
+        
+        # Ping database ########
+        connection.ping()
 
         cursor.execute("select * from property where location ='"+selectedlocation+"' and price != 0;")
         
@@ -290,6 +321,8 @@ def viewlocation():
         for i in selectedamenities:
             print(i)
     
+        # Ping database ########
+        connection.ping()
         
         cursor.execute("select type, price, id, amenities from property where price > "+ minprice + " and price < "+maxprice+ " and location = '"+selectedlocation+"' and amenities like '%"
         +amenities1+"%' and amenities like '%"+amenities2+"%' and amenities like '%"
@@ -309,6 +342,9 @@ def viewlocation():
 
 @app.route('/viewagent',methods=['GET','POST'])
 def viewagent():
+    # Ping database ########
+    connection.ping()
+    
     cursor.execute("select id,name from agent where name != 'N/A';")
     
     listofagents = cursor.fetchall()
@@ -318,6 +354,9 @@ def viewagent():
     
     
     if request.method == 'POST':
+        # Ping database ########
+        connection.ping()
+        
         selectedagent =  request.form.get("selectedagent").replace(')',"").replace("(","").replace("'","").replace(",","")
 
         cursor.execute("select p.id, p.type, p.price, a.name from property p inner join agent a on p.agent_id = a.id where a.id = '"+selectedagent+"';")

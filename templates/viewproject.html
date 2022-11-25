@@ -23,7 +23,7 @@
 
 <form method="POST" action="/viewproject">
 
-<b>Select a development project</b><br>
+<h4>Select a development project</h4><br>
 <select name="selectedproject">
     {%for item in allprojects%}
     <option value="{{item[1]}}">{{item[0]}} {{item[1]}}</option>
@@ -34,8 +34,8 @@
 
 </form>
 
-<b>Development Project Details</b><br>
-<table border = 1>
+<h4>Development Project Details</h4>
+<table border = 1 class="table table-hover">
     <td>URL</td>
     <td>Name</td>
     <td>Location</td>
@@ -54,9 +54,9 @@
 </table>
 
 <br>
-<b>Average Prices and No of Listings Per Unit Type</b><br>
+<h4>Average Prices and No of Listings Per Unit Type</h4>
 
-<table border = 1>
+<table border = 1 class="table table-hover">
   <td>Number of Listings</td>
   <td>Unit Type</td>
   <td>Average Price per Square Meter</td>

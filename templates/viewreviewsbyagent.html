@@ -23,7 +23,7 @@
   <form method="POST" action="/viewreviewsbyagent">
   <select name="selectedagent">
       {%for item in listofagents%}
-      <option value="{{item[0]}}">{{item[0]}}</option>
+      <option value="{{item[0]}}">{{item[1]}}</option>
       {%endfor%}
     </select>
   
@@ -33,7 +33,14 @@
   
 <h4>Selected agent: {{ selectedagent }} </h4>
   <table border = 1 class="table table-hover">
-  
+    <tr>
+      <td>Review ID</td>
+      <td>User</td>
+      <td>Agent</td>
+      <td>Date</td>
+      <td>Review Text</td>
+      
+  </tr>  
     {% for i in listofreviews%}
     <tr>
         <td>{{i[0]}}</td>
