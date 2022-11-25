@@ -23,23 +23,23 @@
 <a href="/">Return to Main Page</a><br>
 <h1>Create New User</h1>
 <form method="POST" action="">
-Name <input type="text" name ="name" value="John Doe"/>
+Name <input type="text" name ="name" required/>
 <br>
 
 Email
-<input type="email" name ="email" value="johndoe@gmail.com"/>
+<input type="email" name ="email" required/>
 <br>
 
-Gender <input type="text" name ="gender" value="M"/>
+Gender (M/F) <input type="text" name ="gender" maxlength ="1" required/>
 <br>
 
-Age <input type="number" name ="age" value="23"/>
+Age <input type="number" name ="age" min="16" required/>
 <br>
 
-Birthdate <input type="date" name ="dob" value="06-09-1999"/>
+Birthdate <input type="date" name ="dob"required/>
 <br>
 
-Area of Focus <input type="focus" name ="focus" value="Rental"/>
+Area of Focus <input type="focus" name ="focus" required/>
 <br>
 
 <input type="submit">
@@ -49,3 +49,34 @@ Area of Focus <input type="focus" name ="focus" value="Rental"/>
 
 </body>
 </html>
+
+
+<h1>New Users Registered</h1>
+<table border = 1 class="table table-hover">
+    <tr>
+        <td>Name</td>
+        <td>Email</td>
+        <td>Gender</td>
+        <td>Age</td>
+        <td>Birthdate</td>
+        <td>Focus</td>
+        <td>ID</td>
+    </tr>
+    {% for user in newusers%}
+    <tr>
+        <td>{{user[0]}}</td>
+        <td>{{user[1]}}</td>
+        <td>{{user[2]}}</td>
+        <td>{{user[3]}}</td>
+        <td>{{user[4]}}</td>
+        <td>{{user[5]}}</td>
+        <td>{{user[6]}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+
+</body>
+</html>
+

@@ -37,6 +37,7 @@ def index():
 # ************ ************ ************
 # Page to create new user - /createuser
 # ************ ************ ************
+newusers = []
 @app.route('/createuser', methods=['GET','POST'])
 def createuser(): 
     if request.method == 'POST':
@@ -48,9 +49,11 @@ def createuser():
         age = userDetails['age']
         dob = str(userDetails['dob'])
         focus = userDetails['focus']
+        userid = faker.ean()
         register_user_cmd = "INSERT INTO user VALUES ('"+name+"','"+email+"','"+gender+"',"+str(age)+",'"+dob+"','"+focus+"')"
         print(register_user_cmd)
         cursor.execute(register_user_cmd)
+        newusers.append([name, email, gender, age, dob, focus, userid])
         try:
             cursor.execute(register_user_cmd)
             # connection.commit()
@@ -64,19 +67,10 @@ def createuser():
             print(cursor.fetchall())
         except Exception as e:
             print(e)
-    if request.method == 'GET':
-        pass
-        
-    return render_template('createuser.html')
-# ************ ************ ************
-# Page to view all users - /viewusers
-# ************ ************ ************
+        return render_template('createuser.html',newusers=newusers)
 
-@app.route('/viewusers')
-def viewusers():
-    cursor.execute("SELECT * from property limit 100")
-    users = cursor.fetchall()
-    return render_template('viewusers.html',users=users)
+    if request.method == 'GET':
+        return render_template('createuser.html',newusers=newusers)
 
 # ************ ************ ************
 # Page to add review on agent
