@@ -26,15 +26,16 @@ The GUI app has several functionalities, including:
 
 ## Instructions
 
-To start the flask app, navigate to the main directory and run
+To start the flask app, navigate to the project directory and run
+
+```sh
+pip install -r requirements.txt
+```
+
+Then run
+
 ```sh
 python3 app.py
 ```
 
-## Database
-
-The 
-
-Dump files are provided: 
-#### ``create_database.sql``
-#### ``propertyfinder55_dump_final``
+To open the web app, paste [127.0.0.1:5000](http://127.0.0.1:5000/) into the browser
