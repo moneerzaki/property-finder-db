@@ -1,0 +1,53 @@
+<a href="/">Return to Main Page</a><br>
+<h1>View Project</h1>
+
+<form method="POST" action="/viewproject">
+
+<b>Select a development project</b><br>
+<select name="selectedproject">
+    {%for item in allprojects%}
+    <option value="{{item[1]}}">{{item[0]}} {{item[1]}}</option>
+    {%endfor%}
+  </select>
+
+<input type="submit">
+
+</form>
+
+<b>Development Project Details</b><br>
+<table border = 1>
+    <td>URL</td>
+    <td>Name</td>
+    <td>Location</td>
+    <td>Head Office</td>
+    <td>Total Units</td>
+  {% for i in projectdetails%}
+  <tr>
+      <td>{{i[0]}}</td>
+      <td>{{i[1]}}</td>
+      <td>{{i[2]}}</td>
+      <td>{{i[3]}}</td>
+      <td>{{i[4]}}</td>
+      
+  </tr>
+  {% endfor %}
+</table>
+
+<br>
+<b>Average Prices and No of Listings Per Unit Type</b><br>
+
+<table border = 1>
+  <td>Number of Listings</td>
+  <td>Unit Type</td>
+  <td>Average Price per Square Meter</td>
+
+{% for i in projectdetails2%}
+<tr>
+    <td>{{i[0]}}</td>
+    <td>{{i[1]}}</td>
+    <td>{{i[2]}}</td>
+
+    
+</tr>
+{% endfor %}
+</table>

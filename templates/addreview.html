@@ -1,0 +1,67 @@
+<a href="/">Return to Main Page</a><br><br>
+<h1>Add Review</h1>
+
+<form method="POST" action="/addreview">
+
+
+Review Text <input type="text" name ="reviewtext"required/>
+<br>
+
+Username <input type="text" name ="username" required/>
+<br>
+
+Date <input type="date" name ="date" required/>
+<br>
+<b>Select agent to review</b>
+<select name="selectedagent">
+    {%for item in listofagents%}
+    <option value="{{item}}">{{item[0]}}</option>
+    {%endfor%}
+  </select>
+
+<input type="submit">
+
+</form>
+<b>Latest Added Review:</b>
+<table border = 1>
+    
+    <tr>
+    {% for i in addedreview%}
+    
+        <td>{{i}}</td>
+    
+    {% endfor %}
+    </tr>
+</table>
+<b>All Added Reviews:</b>
+
+<table border = 1>
+    
+    
+    {% for i in alladdedreviews%}
+    <tr>
+        
+        <td>{{i[0]}}</td>
+        <td>{{i[1]}}</td>
+        <td>{{i[2]}}</td>
+        <td>{{i[3]}}</td>
+        <td>{{i[4]}}</td>
+    
+    {% endfor %}
+    </tr>
+</table>
+<b>All Reviews:</b>
+<table border = 1>
+    {% for i in allreviews%}
+    <tr>
+    
+    
+        <td>{{i[0]}}</td>
+        <td>{{i[1]}}</td>
+        <td>{{i[2]}}</td>
+        <td>{{i[3]}}</td>
+        <td>{{i[4]}}</td>
+    
+    </tr>
+    {% endfor %}
+</table>
