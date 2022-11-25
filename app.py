@@ -84,7 +84,7 @@ def viewusers():
 alladdedreviews = []
 @app.route('/addreview', methods =['GET','POST'])
 def addreview():
-    cursor.execute("Select id from agent limit 20;")
+    cursor.execute("select id from agent limit 20;")
     listofagents = cursor.fetchall()
     
     cursor.execute("select * from review limit 20;")
@@ -93,11 +93,14 @@ def addreview():
     if request.method == 'POST':
         reviewid = faker.ean()
         reviewtext = request.form.get("reviewtext")
-        agentid = request.form.get("selectedagent").replace(')',"").replace("(","").replace("'","").replace(",","")
+        agentid = request.form.get("selectedagent").replace("(","").replace(")","").replace(",","").replace("'","")
+        print("Agent ID ##########\n")
+        print(agentid)
         date = request.form.get("date")
+        rating = request.form.get("rating")
         username = request.form.get("username")
         
-        cursor.execute("insert into review values('"+reviewid+"','"+username+"','"+agentid+"','"+date+"','"+reviewtext+"');") 
+        cursor.execute("insert into review values('"+reviewid+"','"+username+"','"+agentid+"','"+date+"','"+reviewtext+"',"+rating+");") 
 
         print("query successfully executed")
         
